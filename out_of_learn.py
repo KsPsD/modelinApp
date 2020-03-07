@@ -14,8 +14,8 @@ def tokenizer(text):
                            text.lower())
 
 
-text = re.sub('[\W]+', ' ', text.lower()) + \
-    ' '.join(emoticons).replace('-', '')
+text = re.sub('[\W]+', ' ', text.lower()) +
+' '.join(emoticons).replace('-', '')
 tokenized = [w for w in text.split() if w not in stop]
 return tokenized
 
@@ -41,3 +41,11 @@ def get_minibatch(doc_stream, size):
     except StopIteration:
         pass
     return docs, y
+
+
+vect = HashingVectorizer(decode_error='ignore',
+                         n_features=2**21,
+                         preprocessor=None,
+                         tokenizer=tokenizer)
+clf = SGDClassifier(loss='log', random_state=1, max_iter=1)
+doc_stream = stream_docs(path='movie_data.csv')
